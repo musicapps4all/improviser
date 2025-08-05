@@ -87,12 +87,6 @@ function updateKeyDisplay() {
 
 // ------------ Event Handlers ------------
 
-// Keyboard Mode Toggle
-document.getElementById('keyboard-mode-toggle').addEventListener('click', (e) => {
-    e.target.classList.toggle('active');
-    appContainer.classList.toggle('keyboard-mode-active');
-});
-
 // Key Controls
 document.getElementById('key-left').addEventListener('click', () => {
     currentKeyIndex = (currentKeyIndex - 1 + keyNames.length) % keyNames.length;
@@ -128,6 +122,7 @@ document.getElementById('scale-select').addEventListener('change', (e) => {
     chordApp.contentWindow.postMessage({ type: 'setScale', scale: chordScale }, new URL(chordApp.src).origin);
     
     updateSimulatedKeyboardColors(); // Update keyboard on scale change
+    e.target.blur(); // Remove focus from the dropdown
 });
 
 // Names Toggle
@@ -178,7 +173,7 @@ document.getElementById('note-sound-right').addEventListener('click', () => {
 // ------------ Keyboard Event Handling ------------
 
 function routeKeyEvent(event) {
-    if (!appContainer.classList.contains('keyboard-mode-active')) return;
+    // No longer need to check for keyboard mode, it's always on.
     if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.isContentEditable) return;
     
     const key = event.key.toLowerCase();
